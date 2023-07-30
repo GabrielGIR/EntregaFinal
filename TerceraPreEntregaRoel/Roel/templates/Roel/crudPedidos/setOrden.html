@@ -1,0 +1,14 @@
+{% extends "Roel/inicio.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block contenidoQueCambia %}
+    <div class="container">
+        <h2>Crear un pedido</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="submit" value="Crear pedido" class="btn btn-primary">
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,18 @@
+<div>
+    {% extends "Roel/inicio.html" %}
+    {% load static %}
+
+    {% block contenidoQueCambia %}
+    <h1>PARA APLICAR PARA SER UNA DISTRIBUIDORA PORFAVOR SELECCIONE UNA OPCION!</h1>
+     <div class="formSetDistri">
+        {% block setDistri %}
+        <a href="{% url 'setDistri' %}" class="btn btn-primary">Para ser una distribuidora, haga clic aquí</a>
+        {% endblock %}
+     </div>
+     <div class="formGetDistri">
+        {% block getDistri %}
+        <a href="{% url 'getDistri' %}" class="btn btn-primary">Si quieres saber si alguien es una distribuidora, haz clic aquí</a>
+        {% endblock %}
+     </div>
+    {% endblock %}
+</div>

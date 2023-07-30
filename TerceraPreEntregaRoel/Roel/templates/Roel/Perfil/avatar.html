@@ -1,0 +1,13 @@
+{% extends "Roel/inicio.html" %}
+{% load static %}
+{% block contenidoQueCambia %}
+    <h3>Avatar</h3>
+    <h5>{{user.username}}</h5>
+
+    <form method = "POST" enctype="multipart/form-data"> {% csrf_token %}
+        <table>
+            {{form.as_p}}
+        </table>
+        <input type="submit" value="aceptar">
+    </form>
+{% endblock %}

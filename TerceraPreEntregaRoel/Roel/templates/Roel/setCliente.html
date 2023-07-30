@@ -1,0 +1,14 @@
+{% extends "Roel/inicio.html" %}
+{% load static %}
+
+{% block contenidoQueCambia %}
+     <form action="/Roel/setCliente" method="post"> {% csrf_token %}
+
+        <input placeholder="Nombre" type = "text" name="nombre" required>
+        <input placeholder="Apellido" type = "text" name="apellido" required>
+        <input placeholder="Email" type = "email" name="email" required>
+        <input placeholder="Item que desea" type = "item" name="item" required>
+
+        <input type = "submit" value="Enviar">
+    </form>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "Roel/inicio.html" %}
+{% load humanize %}
+{% load static %}
+{% block contenidoQueCambia %}
+
+    <h1>¡El foro del grupo!</h1>
+    <a href="{% url 'post' %}" class="btn btn-primary">Haz un post!</a>
+    {% for post in posts %}
+        <article>
+            <div class="container-article">
+                <div>
+                    <h2 class="username"><a href="">@{{post.user.username|naturaltime}}</a></h2>
+                    <i class="clock"></i>
+                    <time data-time="#">{{post.timestamp }}</time>
+                    <div class="POST">{{post.content}}</div>
+                </div>
+            </div>
+        </article>
+    {% endfor %}
+{% endblock %}

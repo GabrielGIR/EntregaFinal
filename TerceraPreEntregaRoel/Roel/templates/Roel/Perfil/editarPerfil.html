@@ -1,0 +1,14 @@
+{% extends "Roel/inicio.html" %}
+{% load static %}
+{% block contenidoQueCambia %}
+    <h3>Editar Perfil</h3>
+    <h6>{{user.username}}</h6>
+
+    <form method="post" action="{% url 'editarPerfil' %}"> {% csrf_token %}
+        <table>
+            {{form.as_table}}
+        </table>
+        <input type="submit" value="Editar perfil">
+    </form> 
+    <a href="/Roel/Perfil/changePassword">Cambiar Contraseña</a>
+{% endblock %}

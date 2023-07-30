@@ -1,0 +1,18 @@
+<div>
+    {% extends "Roel/inicio.html" %}
+    {% load static %}
+
+   {% block contenidoQueCambia %}
+     <h1>PARA APLICAR PARA SER UN LOCAL DE NOSOTROS PORFAVOR SELECCIONE UNA OPCION!</h1>
+     <div class="formSetLocal">
+        {% block setLocal %}
+        <a href="{% url 'setLocal' %}" class="btn btn-primary">Para que su local sea socio de nosotros, haga clic aquí</a>
+        {% endblock %}
+     </div>
+     <div class="formGetLocal">
+        {% block getLocal %}
+        <a href="{% url 'getLocal' %}" class="btn btn-primary">Si quieres saber si algun local es socio, haz clic aquí</a>
+        {% endblock %}
+     </div>
+   {% endblock %}
+</div>

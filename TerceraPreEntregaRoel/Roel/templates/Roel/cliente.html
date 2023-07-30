@@ -1,0 +1,59 @@
+{% extends "Roel/inicio.html" %}
+{% load static %}
+
+{% block contenidoQueCambia %}
+    <div class="clientes-container">
+        <div class="clientes-header">
+            <h2>¡Todos nuestros clientes!</h2>
+        </div>
+        <div class="clientes-form">
+            <h5>¡Si quieres ser un cliente aprieta acá!</h5>
+            <form action="/Roel/setCliente" method="post"> 
+                {% csrf_token %}
+                {{ form.as_p }} 
+                <input type="submit" value="¡Aprieta Aquí!" class="btn btn-success">
+            </form>
+            {% if mensaje %}
+                <div class="alert alert-success" role="alert">
+                    {{ mensaje }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="clientes-table">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cliente in clientes %}
+                    <tr>
+                        <td>{{ cliente.nombre }}</td>
+                        <td>{{ cliente.apellido }}</td>
+                        <td>{{ cliente.email }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if show_ver_mas %}
+                <div class="ver-mas">
+                    {% if user.is_staff %}
+                        <a href="/Roel/verMasClientes" class="btn btn-success">Ver más</a>
+                    {% else %}
+                        <button class="btn btn-success" onclick="mostrarMensaje()">Ver más</button>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+<script>
+    function mostrarMensaje() {
+        alert("Usuario sin permisos necesarios");
+    }
+</script>

@@ -1,0 +1,36 @@
+{% extends "Roel/inicio.html" %}
+{% load static %}
+
+{% block contenidoQueCambia %}
+    <div class="perfil-info">
+        <h2>{{user.username}}</h2>
+        <ul>
+            <li>{{user.first_name}} {{user.last_name}}</li>
+            <li>{{user.email}}</li>
+        </ul>
+        <a href="/Roel/Perfil/editarPerfil" class="btn btn-success">Editar Perfil</a>
+        <a href="/Roel/Perfil/changeAvatar" class="btn btn-success">Cambiar avatar</a>
+    </div>
+
+    <div class="perfil-pedidos">
+        <h2>Órdenes realizadas por {{ user.username }}:</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre del producto</th>
+                    <th>Fecha de creación</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pedido in pedidos %}
+                <tr>
+                    <td>{{ pedido.producto.nombre }}</td>
+                    <td>{{ pedido.date_created }}</td>
+                    <td>{{ pedido.estado }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

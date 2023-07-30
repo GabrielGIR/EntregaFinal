@@ -1,0 +1,11 @@
+{% extends "Roel/inicio.html" %}
+{% load static %}
+{% block contenidoQueCambia %}
+    <p>¿ESTAS SEGURO DE ELMINAR ESTO {{orden}}?</p>
+    <form action="{% url 'deleteOrden' orden.id %}" method="POST"> {% csrf_token %}
+
+        <a href="{%url 'inicio' %}">Cancelar</a>
+        <input type="submit" name="Confirmar" id="">
+    </form>
+
+{% endblock %}
