@@ -10,8 +10,8 @@ from django.contrib.auth.models import User, Group
 from django.contrib import messages
 from .decorators import *
 
-@login_required
-@allowed_users(allowed_roles=['admin','clientes'])
+
+
 def inicio(request):
     avatar = getavatar(request)
     pedidos = Ordenar.objects.all()
@@ -20,7 +20,7 @@ def inicio(request):
     context = {'pedidos': pedidos, 'usuarios': usuarios, 'avatar': avatar}
     return render(request, 'Roel/inicio.html', context)
 
-@login_required
+
 def cliente(request):
     clientes = Cliente.objects.all()[:5]  # Limitamos a solo 5 clientes
     avatar = getavatar(request)
@@ -37,10 +37,68 @@ def cliente(request):
     }
     return render(request, 'Roel/cliente.html', context)
 
-@login_required
 def distri(request):
     avatar = getavatar(request)
-    return render(request,'Roel/distri.html',{"avatar":avatar})
+    distribuidoras = Distribuidora.objects.all()
+    return render(request, 'Roel/distribuidoras/distri.html', {"avatar": avatar, "distribuidoras": distribuidoras})
+
+
+def productos_distribuidora(request, distribuidora_id):
+    distribuidora = get_object_or_404(Distribuidora, id=distribuidora_id)
+    productos = distribuidora.producto_set.all()
+    return render(request, 'Roel/distribuidoras/productos_distribuidora.html', {'distribuidora': distribuidora, 'productos': productos})
+
+
+@login_required
+def setDistri(request):
+    if request.method == 'POST':
+        form = FormSolicitudDistribuidora(request.POST)
+        if form.is_valid():
+            solicitud = form.save(commit=False)
+            solicitud.user = request.user
+            solicitud.save()
+            mensaje = "¡Gracias por enviar tu solicitud! Pronto nos pondremos en contacto contigo para confirmar si ha sido aprobada o no."
+            return redirect('ver_solicitudes_distri')
+    else:
+        form = FormSolicitudDistribuidora()
+    
+    return render(request, 'Roel/distribuidoras/setDistri.html', {'form': form})
+
+@login_required
+def solicitud_enviada(request):
+    return render(request, 'Roel/distribuidoras/solicitud_enviada.html')
+
+@login_required
+@allowed_users(allowed_roles=['admin'])
+def ver_solicitudes_distri(request):
+    if request.method == 'POST':
+        solicitud_id = request.POST.get('solicitud_id')
+        aprobada = request.POST.get('aprobada')
+        if solicitud_id and aprobada in ['True', 'False']:
+            solicitud = SolicitudDistribuidora.objects.get(id=solicitud_id)
+            solicitud.aprobado = aprobada == 'True'
+            solicitud.save()
+
+    solicitudes = SolicitudDistribuidora.objects.filter(aprobado=False)  # Obtiene todas las solicitudes pendientes
+
+    context = {
+        'solicitudes': solicitudes,
+    }
+
+    return render(request, 'Roel/distribuidoras/ver_solicitudes_distri.html', context)
+
+@login_required
+@allowed_users(allowed_roles=['admin'])
+def aprobar_solicitud(request, solicitud_id):
+    solicitud = SolicitudDistribuidora.objects.get(id=solicitud_id)
+    solicitud.aprobado = True
+    solicitud.save()
+
+    # Crear una nueva instancia de Distribuidora con los datos de la solicitud aprobada
+    distribuidora = Distribuidora(nombre=solicitud.nombre, email=solicitud.email, profesion=solicitud.profesion)
+    distribuidora.save()
+
+    return redirect('ver_solicitudes_distri')
 
 @login_required
 def local(request):
@@ -49,15 +107,15 @@ def local(request):
 
 @login_required
 def setCliente(request):
-    if request.method == 'POST':
-        miFormulario = formSetCliente(request.POST)
-        if miFormulario.is_valid():
-            data = miFormulario.cleaned_data
-            cliente = Cliente(nombre=data["nombre"], apellido=data["apellido"], email=data["email"])
-            cliente.save()
-            return render(request, "Roel/cliente.html", {"miFormulario": miFormulario, "Cliente": Cliente, "mensaje": "Cliente registrado exitosamente!"})
-    else:
-        miFormulario = formSetCliente()
+ #   if request.method == 'POST':
+ #       miFormulario = formSetCliente(request.POST)
+  #      if miFormulario.is_valid():
+  #          data = miFormulario.cleaned_data
+   #         cliente = Cliente(nombre=data["nombre"], apellido=data["apellido"], email=data["email"])
+   #         cliente.save()
+   #         return render(request, "Roel/cliente.html", {"miFormulario": miFormulario, "Cliente": Cliente, "mensaje": "Cliente registrado exitosamente!"})
+  #  else:
+   #     miFormulario = formSetCliente()
 
     clientes = Cliente.objects.all()[:5]  # Limitamos a solo 5 clientes
     avatar = getavatar(request)
@@ -65,13 +123,12 @@ def setCliente(request):
 
     show_ver_mas = False
     if clientes_totales > 5 and not request.user.is_staff:
-        show_ver_mas = True  # Mostrar el botón "Ver más" solo si hay más de 5 clientes y el usuario no es administrador
+       show_ver_mas = True  # Mostrar el botón "Ver más" solo si hay más de 5 clientes y el usuario no es administrador
 
     context = {
         "avatar": avatar,
         "clientes": clientes,
         "show_ver_mas": show_ver_mas,
-        "form": miFormulario,
     }
     return render(request, 'Roel/cliente.html', context)
 
@@ -93,19 +150,6 @@ def buscarCliente(request):
     return HttpResponse(respuesta)
 
 
-@login_required
-def setDistri(request):
-    if request.method == 'POST':
-        miFormulario = formSetDistri(request.POST)
-        print(miFormulario)
-        if miFormulario.is_valid:
-            data = miFormulario.cleaned_data
-            distri = Distribuidora(nombre=data["nombre"],apellido=data["apellido"], email=data["email"], profesion=data["profesion"])
-            distri.save()
-            return render(request, "Roel/setDistri.html", {"miFormulario": miFormulario, "Distri": Distribuidora})
-    else:
-        miFormulario = formSetDistri()
-    return render(request, "Roel/setDistri.html", {"miFormulario": miFormulario, "Distri": Distribuidora})
 
 
 @login_required
@@ -256,6 +300,7 @@ def getavatar(request):
         avatar = None
     return avatar
 
+
 @login_required
 def setOrden(request):
     if request.method == 'POST':
@@ -294,6 +339,7 @@ def deleteOrden(request, id_orden):
     context = {'orden':orden}
     return render (request, 'Roel/crudPedidos/deleteOrden.html', context)
 
+@login_required
 def foro(request):
     posts = Post.objects.all()
     context = {'post':post}

@@ -19,6 +19,7 @@
                 <tr>
                     <th>Nombre del producto</th>
                     <th>Fecha de creación</th>
+                    <th>Precio</th>
                     <th>Estado</th>
                 </tr>
             </thead>
@@ -27,6 +28,7 @@
                 <tr>
                     <td>{{ pedido.producto.nombre }}</td>
                     <td>{{ pedido.date_created }}</td>
+                    <td>{{ pedido.precio }}</td>
                     <td>{{ pedido.estado }}</td>
                 </tr>
                 {% endfor %}

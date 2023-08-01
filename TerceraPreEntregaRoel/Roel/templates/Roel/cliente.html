@@ -8,16 +8,9 @@
         </div>
         <div class="clientes-form">
             <h5>¡Si quieres ser un cliente aprieta acá!</h5>
-            <form action="/Roel/setCliente" method="post"> 
-                {% csrf_token %}
-                {{ form.as_p }} 
+            <form action="{% url 'registro' %}" method="post"> {% csrf_token %}
                 <input type="submit" value="¡Aprieta Aquí!" class="btn btn-success">
             </form>
-            {% if mensaje %}
-                <div class="alert alert-success" role="alert">
-                    {{ mensaje }}
-                </div>
-            {% endif %}
         </div>
 
         <div class="clientes-table">

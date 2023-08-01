@@ -535,3 +535,25 @@ hr {
 .ver-mas .btn:hover {
   background-color: #45a049;
 }
+
+.post-form {
+  max-width: 400px;
+  margin: auto;
+}
+
+.post-form label {
+  font-weight: bold;
+  display: block;
+}
+
+.post-form input[type="text"],
+.post-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.post-form button {
+  margin-top: 10px;
+}

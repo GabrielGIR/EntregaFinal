@@ -1,0 +1,44 @@
+{% extends "Roel/inicio.html" %}
+{% load static %}
+
+{% block contenidoQueCambia %}
+    <h1>Si quieres aplicar para ser una distribuidora</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Para aplicar a ser una distribuidora;</h5>
+                    <form action="{% url 'setDistri' %}" method="post" class="form">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="submit" value="¡Apriete aquí!" class="btn btn-primary">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h1>Lista de Distribuidoras</h1>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Profesión</th>
+                    <th>Ver Productos</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for distribuidora in distribuidoras %}
+                <tr>
+                    <td>{{ distribuidora.nombre }}</td>
+                    <td>{{ distribuidora.email }}</td>
+                    <td>{{ distribuidora.profesion }}</td>
+                    <td><a href="{% url 'productos_distribuidora' distribuidora.id %}" class="btn btn-primary">Ver Productos</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

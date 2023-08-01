@@ -29,4 +29,8 @@ urlpatterns = [
     path('post/', post, name='post'),
     path('foro/', foro, name='foro'),
     path('aboutme/', aboutme, name='aboutme'),
+    path('productos_distribuidora/<int:distribuidora_id>/', productos_distribuidora, name='productos_distribuidora'),
+    path('ver_solicitudes_distri/', ver_solicitudes_distri, name='ver_solicitudes_distri'),
+    path('aprobar_solicitud/<int:solicitud_id>/', aprobar_solicitud, name='aprobar_solicitud'),
+ 
 ]

@@ -15,15 +15,12 @@ class formSetCliente(forms.ModelForm):
         fields = ['nombre', 'apellido', 'email']
 
 
-class formSetDistri(forms.Form): #distribuidora
+class FormSolicitudDistribuidora(forms.ModelForm):
+    class Meta:
+        model = SolicitudDistribuidora
+        fields = ['nombre', 'email', 'profesion']
 
-    nombre = forms.CharField(max_length=30)
 
-    apellido = forms.CharField(max_length=30)
-
-    email = forms.EmailField()
-
-    profesion = forms.CharField(max_length=30)
 
 class formSetLocal(forms.Form): #distribuidora
 
@@ -36,11 +33,18 @@ class formSetLocal(forms.Form): #distribuidora
 class formSetOrden(ModelForm):
     class Meta:
         model = Ordenar
-        fields = ['producto', 'estado', 'cliente'] 
+        fields = ['producto', 'estado']
 
-    def __init__(self, *args, **kwargs):
-        super(formSetOrden, self).__init__(*args, **kwargs)
-        self.fields['cliente'].widget = forms.widgets.Select(attrs={'class': 'form-control'})
+class AprobarSolicitudForm(forms.Form):
+    SOLICITUD_CHOICES = (
+        (True, 'Aprobar'),
+        (False, 'Rechazar'),
+    )
+    solicitud_id = forms.IntegerField(widget=forms.HiddenInput())
+    aprobada = forms.ChoiceField(widget=forms.RadioSelect, choices=SOLICITUD_CHOICES)
+
+
+
 
 
 

@@ -1,0 +1,16 @@
+{% extends "Roel/distribuidoras/distri.html" %}
+{% load static %}
+
+{% block contenidoSolicitudDistri %}
+    <h2>Solicitud para ser una distribuidora</h2>
+    {% if mensaje %}
+        <div class="alert alert-success">
+            {{ mensaje }}
+        </div>
+    {% endif %}
+    <form action="{% url 'aprobarSolicitud' solicitud.id %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Enviar Solicitud</button>
+    </form>
+{% endblock %}

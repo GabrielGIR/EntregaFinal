@@ -3,18 +3,19 @@
 {% load static %}
 {% block contenidoQueCambia %}
 
-    <h1>¡El foro del grupo!</h1>
-    <a href="{% url 'post' %}" class="btn btn-primary">Haz un post!</a>
-    {% for post in posts %}
-        <article>
-            <div class="container-article">
-                <div>
-                    <h2 class="username"><a href="">@{{post.user.username|naturaltime}}</a></h2>
-                    <i class="clock"></i>
-                    <time data-time="#">{{post.timestamp }}</time>
-                    <div class="POST">{{post.content}}</div>
+    <div class="container mt-4">
+        <h1 class="display-4 mb-4">¡El foro del grupo!</h1>
+        <a href="{% url 'post' %}" class="btn btn-primary mb-3">Haz un post</a>
+        {% for post in posts %}
+            <article class="card mb-3">
+                <div class="card-body">
+                    <h2 class="card-title username"><a href="">{% if post.user.first_name or post.user.last_name %}@{{ post.user.get_full_name }}{% else %}@{{ post.user.username }}{% endif %}</a></h2>
+                    <p class="card-subtitle text-muted mb-2">
+                        <i class="fa fa-clock me-1"></i> <time data-time="#">{{ post.timestamp|naturaltime }}</time>
+                    </p>
+                    <p class="card-text">{{ post.content }}</p>
                 </div>
-            </div>
-        </article>
-    {% endfor %}
+            </article>
+        {% endfor %}
+    </div>
 {% endblock %}

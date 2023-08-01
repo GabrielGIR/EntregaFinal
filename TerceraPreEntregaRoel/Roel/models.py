@@ -26,12 +26,22 @@ class Cliente(models.Model): #cliente
 class Distribuidora(models.Model): #distribuidora
 
     nombre = models.CharField(max_length=30)
-
-    apellido = models.CharField(max_length=30)
-
     email = models.EmailField()
-
     profesion = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.nombre
+
+class SolicitudDistribuidora(models.Model):
+    nombre = models.CharField(max_length=30)
+    email = models.EmailField()
+    profesion = models.CharField(max_length=30)
+    aprobado = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.nombre
+
+
 
  
 class Local(models.Model): #distribuidora
@@ -58,7 +68,10 @@ class Producto(models.Model):
         ('Pulsera', 'Pulsera'),
         ('Collar', 'Collar'),
         ('Pendiente', 'Pendiente'),
-        ('Pañuelo', 'Pañuelo'),
+        ('Electrodomestico', 'Electrodomestico'),
+        ('Mueble', 'Mueble'),
+        ('Focos', 'Focos'),
+        ('Comestibles', 'Comestibles'),
         )
     nombre = models.CharField(max_length=200, null=True)
     precio = models.FloatField(max_length=8, null=True)
@@ -66,22 +79,31 @@ class Producto(models.Model):
     descripcion = models.CharField(max_length=200, null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)           
     tags = models.ManyToManyField(Tag)
+    distribuidora = models.ForeignKey(Distribuidora, null=True, on_delete=models.SET_NULL)
+
     def __str__(self):
         return self.nombre
 
 
 class Ordenar(models.Model):
     STATUS = (
-        ('Pendiente','Pendiente'),
-        ('No se puede entregar','No se puede entregar'),
-        ('Entreado','Entregado'),
+        ('Pendiente', 'Pendiente'),
+        ('No se puede entregar', 'No se puede entregar'),
+        ('Entregado', 'Entregado'),
     )
-    cliente = models.ForeignKey(Cliente, null=True, on_delete= models.SET_NULL) #CADA VEZ QUE EL CLIENTE DE BAJA AL PEDIDO NO SE BORRE DE LA BASE DE DATOS
-    producto = models.ForeignKey(Producto, null=True, on_delete= models.SET_NULL)
-    date_created = models.DateTimeField(Producto, auto_now_add=True, null=True)
+    cliente = models.ForeignKey(Cliente, null=True, on_delete=models.SET_NULL)
+    producto = models.ForeignKey(Producto, null=True, on_delete=models.SET_NULL)
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
     estado = models.CharField(max_length=200, null=True, choices=STATUS)
+    precio = models.FloatField(null=True)  
+
     def __str__(self):
         return self.producto.nombre
+
+    def save(self, *args, **kwargs):
+        if self.producto:
+            self.precio = self.producto.precio
+        super().save(*args, **kwargs)
     
 
 class Post(models.Model):

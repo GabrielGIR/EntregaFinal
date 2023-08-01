@@ -1,0 +1,18 @@
+{% extends "Roel/distribuidoras/distri.html" %}
+{% load static %}
+
+{% block contenidoSolicitudDistri %}
+    <h2>Solicitudes para ser una distribuidora</h2>
+    <form action="{% url 'ver_solicitudes_distri' %}" method="post">
+        {% csrf_token %}
+        {% for solicitud in solicitudes %}
+            <div>
+                <input type="hidden" name="solicitud_id" value="{{ solicitud.id }}">
+                <label for="id_aprobada_{{ solicitud.id }}">{{ solicitud.nombre }} - {{ solicitud.email }} - {{ solicitud.profesion }}</label>
+                <input type="radio" id="id_aprobada_{{ solicitud.id }}" name="aprobada" value="True"> Aprobar
+                <input type="radio" id="id_aprobada_{{ solicitud.id }}" name="aprobada" value="False"> Rechazar
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Actualizar Solicitudes</button>
+    </form>
+{% endblock %}

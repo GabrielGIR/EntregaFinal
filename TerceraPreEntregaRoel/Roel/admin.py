@@ -8,6 +8,7 @@ admin.site.register(Ordenar)
 admin.site.register(Producto)
 admin.site.register(Tag)
 admin.site.register(Post)
+admin.site.register(SolicitudDistribuidora)
 
 admin.site.register(Avatar)
 # Register your models here.

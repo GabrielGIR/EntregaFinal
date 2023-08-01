@@ -1,10 +1,14 @@
 {% extends "Roel/inicio.html" %}
 {% load static %}
 {% block contenidoQueCambia %}
-    <form action="" method="POST"> {% csrf_token %}
-        {{post_form.as_p}}
-        <button type="submit" class="post">Post</button>
-
-    </form>
-
+    <div class="container mt-4">
+        <form action="" method="POST" class="post-form">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="{{ post_form.content.id_for_label }}">Contenido</label>
+                {{ post_form.content }}
+            </div>
+            <button type="submit" class="btn btn-primary">Post</button>
+        </form>
+    </div>
 {% endblock %}
