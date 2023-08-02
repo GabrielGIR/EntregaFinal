@@ -33,7 +33,16 @@ class formSetLocal(forms.Form): #distribuidora
 class formSetOrden(ModelForm):
     class Meta:
         model = Ordenar
-        fields = ['producto', 'estado']
+        fields = ['producto', 'estado', 'cantidad']
+
+    def clean_cantidad(self):
+        cantidad_solicitada = self.cleaned_data.get('cantidad', 0)
+        producto = self.cleaned_data.get('producto')
+
+        if producto and cantidad_solicitada > producto.cantidad_stock:
+            raise forms.ValidationError(f"No hay suficiente stock disponible. Stock actual: {producto.cantidad_stock}")
+
+        return cantidad_solicitada
 
 class AprobarSolicitudForm(forms.Form):
     SOLICITUD_CHOICES = (

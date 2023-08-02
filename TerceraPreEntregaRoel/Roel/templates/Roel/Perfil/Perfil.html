@@ -18,6 +18,7 @@
             <thead>
                 <tr>
                     <th>Nombre del producto</th>
+                    <th>Cantidad</th>
                     <th>Descripción</th>
                     <th>Fecha de creación</th>
                     <th>Precio</th>
@@ -28,6 +29,7 @@
                 {% for pedido in pedidos %}
                 <tr>
                     <td>{{ pedido.producto.nombre }}</td>
+                    <td>{{ pedido.cantidad }}</td>
                     <td>{{ pedido.producto.descripcion }}</td>
                     <td>{{ pedido.date_created }}</td>
                     <td>{{ pedido.precio }}</td>

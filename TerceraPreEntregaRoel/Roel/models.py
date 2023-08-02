@@ -2,11 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-class Stock(models.Model): #stock
 
-    nombre = models.CharField(max_length=40)
-
-    cantidad = models.IntegerField()
 
  
 
@@ -83,6 +79,8 @@ class Producto(models.Model):
     tags = models.ManyToManyField(Tag)
     distribuidora = models.ForeignKey(Distribuidora, null=True, on_delete=models.SET_NULL)
 
+    cantidad_stock = models.IntegerField(default=0)
+
     def __str__(self):
         return self.nombre
 
@@ -98,6 +96,7 @@ class Ordenar(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     estado = models.CharField(max_length=200, null=True, choices=STATUS)
     precio = models.FloatField(null=True)  
+    cantidad = models.IntegerField(default=1)
 
     def __str__(self):
         return f"{self.producto.nombre} - {self.producto.descripcion} - Precio: {self.precio}"
@@ -105,6 +104,8 @@ class Ordenar(models.Model):
     def save(self, *args, **kwargs):
         if self.producto:
             self.precio = self.producto.precio
+            self.producto.cantidad_stock -= self.cantidad  # Restar la cantidad del stock del producto
+            self.producto.save()  # Guardar el producto actualizado en la base de datos
         super().save(*args, **kwargs)
     
 
