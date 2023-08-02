@@ -3,7 +3,6 @@ from .models import *
 
 admin.site.register(Cliente)
 admin.site.register(Distribuidora)
-admin.site.register(Local)
 admin.site.register(Ordenar)
 admin.site.register(Producto)
 admin.site.register(Tag)

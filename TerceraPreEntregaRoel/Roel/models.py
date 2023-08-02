@@ -39,16 +39,6 @@ class SolicitudDistribuidora(models.Model):
 
 
 
- 
-class Local(models.Model): #distribuidora
-
-    nombre = models.CharField(max_length=30)
-
-    calle = models.CharField(max_length=30)
-
-    país = models.CharField(max_length=30)
-
-
 class Avatar(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='avatares', null= True,  blank=True)

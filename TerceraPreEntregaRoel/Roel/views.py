@@ -84,7 +84,7 @@ def ver_solicitudes_distri(request):
             solicitud.aprobado = aprobada == 'True'
             solicitud.save()
 
-    solicitudes = SolicitudDistribuidora.objects.filter(aprobado=False)  # Obtiene todas las solicitudes pendientes
+    solicitudes = SolicitudDistribuidora.objects.filter(aprobado=False)  
 
     context = {
         'solicitudes': solicitudes,
@@ -99,7 +99,6 @@ def aprobar_solicitud(request, solicitud_id):
     solicitud.aprobado = True
     solicitud.save()
 
-    # Crear una nueva instancia de Distribuidora con los datos de la solicitud aprobada
     distribuidora = Distribuidora(nombre=solicitud.nombre, email=solicitud.email, profesion=solicitud.profesion)
     distribuidora.save()
 
@@ -122,13 +121,13 @@ def setCliente(request):
   #  else:
    #     miFormulario = formSetCliente()
 
-    clientes = Cliente.objects.all()[:5]  # Limitamos a solo 5 clientes
+    clientes = Cliente.objects.all()[:5]  
     avatar = getavatar(request)
-    clientes_totales = Cliente.objects.count()  # Obtenemos la cantidad total de clientes
+    clientes_totales = Cliente.objects.count()  
 
     show_ver_mas = False
     if clientes_totales > 5 and not request.user.is_staff:
-       show_ver_mas = True  # Mostrar el botón "Ver más" solo si hay más de 5 clientes y el usuario no es administrador
+       show_ver_mas = True 
 
     context = {
         "avatar": avatar,
@@ -173,32 +172,32 @@ def buscarDistri(request):
     
     return HttpResponse(respuesta)
 
-@login_required
-def setLocal(request):
-    if request.method == 'POST':
-        miFormulario = formSetLocal(request.POST)
-        print(miFormulario)
-        if miFormulario.is_valid:
-            data = miFormulario.cleaned_data
-            local = Local(nombre=data["nombre"],calle=data["calle"], pais=data["pais"])
-            local.save()
-            return render(request, "Roel/setLocal.html", {"miFormulario": miFormulario, "Local": Local})
-    else:
-        miFormulario = formSetCliente()
-    return render(request, "Roel/setLocal.html", {"miFormulario": miFormulario, "Cliente": Local})
+#@login_required
+#def setLocal(request):
+  #  if request.method == 'POST':
+   #     miFormulario = formSetLocal(request.POST)
+    #    print(miFormulario)
+     #   if miFormulario.is_valid:
+      #      data = miFormulario.cleaned_data
+       #     local = Local(nombre=data["nombre"],calle=data["calle"], pais=data["pais"])
+        #    local.save()
+         #   return render(request, "Roel/setLocal.html", {"miFormulario": miFormulario, "Local": Local})
+    #else:
+     #   miFormulario = formSetCliente()
+    #return render(request, "Roel/setLocal.html", {"miFormulario": miFormulario, "Cliente": Local})
 
-@login_required
-def getLocal(request):
-    return render(request, 'Roel/getLocal.html')
+#@login_required
+#def getLocal(request):
+ #   return render(request, 'Roel/getLocal.html')
 
-@login_required
-def buscarLocal(request):
-    if request.GET["nombre"]:
-        nombre = request.GET["nombre"]
-        locales = Local.objects.filter(nombre = nombre)
-        return render(request, "Roel/getLocal.html", {"local":locales})
-    else:
-        respuesta = "No se enviaron datos"
+#@login_required
+#def buscarLocal(request):
+ #   if request.GET["nombre"]:
+  #      nombre = request.GET["nombre"]
+   #     locales = Local.objects.filter(nombre = nombre)
+    #    return render(request, "Roel/getLocal.html", {"local":locales})
+   # else:
+    #    respuesta = "No se enviaron datos"
     
     return HttpResponse(respuesta)
 
@@ -305,17 +304,18 @@ def getavatar(request):
         avatar = None
     return avatar
 
-
 @login_required
 def setOrden(request):
     if request.method == 'POST':
-        form = formSetOrden(request.POST, initial={'cliente': request.user.cliente})
+        form = formSetOrden(request.POST)
         if form.is_valid():
-            form.save()
+            orden = form.save(commit=False)
+            orden.cliente = request.user.cliente  # Asociar el cliente al pedido
+            orden.save()
             return redirect('inicio')
 
     else:
-        form = formSetOrden(initial={'cliente': request.user.cliente})
+        form = formSetOrden()
 
     context = {'form': form}
     return render(request, 'Roel/crudPedidos/setOrden.html', context)
