@@ -2,6 +2,12 @@
 {% load static %}
 
 {% block contenidoQueCambia %}
+    {% if mensaje %}
+    <div class="alert alert-success">
+        {{ mensaje }}
+    </div>
+    {% endif %}
+
     <h1>Si quieres aplicar para ser una distribuidora</h1>
     <div class="row">
         <div class="col-md-6">

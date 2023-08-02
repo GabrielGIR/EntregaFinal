@@ -1,0 +1,32 @@
+{% extends "Roel/inicio.html" %}
+{% load static %}
+
+{% block contenidoQueCambia %}
+    <div class="container">
+        <h1 class="display-4 mb-4">Lista de Clientes</h1>
+        {% if usuarios %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre de usuario</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in usuarios %}
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.first_name }}</td>
+                            <td>{{ user.last_name }}</td>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No hay clientes registrados.</p>
+        {% endif %}
+    </div>
+{% endblock %}

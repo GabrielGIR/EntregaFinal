@@ -32,5 +32,6 @@ urlpatterns = [
     path('productos_distribuidora/<int:distribuidora_id>/', productos_distribuidora, name='productos_distribuidora'),
     path('ver_solicitudes_distri/', ver_solicitudes_distri, name='ver_solicitudes_distri'),
     path('aprobar_solicitud/<int:solicitud_id>/', aprobar_solicitud, name='aprobar_solicitud'),
+    path('verMasClientes/', verMasClientes, name='verMasClientes'),
  
 ]

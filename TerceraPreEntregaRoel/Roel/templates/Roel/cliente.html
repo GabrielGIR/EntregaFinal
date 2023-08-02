@@ -23,24 +23,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for cliente in clientes %}
+                    {% for usuario in usuarios|slice:":5" %}
                     <tr>
-                        <td>{{ cliente.nombre }}</td>
-                        <td>{{ cliente.apellido }}</td>
-                        <td>{{ cliente.email }}</td>
+                        <td>{{ usuario.first_name }}</td>
+                        <td>{{ usuario.last_name }}</td>
+                        <td>{{ usuario.email }}</td> 
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
             {% if show_ver_mas %}
-                <div class="ver-mas">
-                    {% if user.is_staff %}
-                        <a href="/Roel/verMasClientes" class="btn btn-success">Ver más</a>
-                    {% else %}
-                        <button class="btn btn-success" onclick="mostrarMensaje()">Ver más</button>
-                    {% endif %}
-                </div>
-            {% endif %}
+            <div class="ver-mas">
+                <a href="/Roel/verMasClientes" class="btn btn-success">Ver más</a>
+            </div>
+        {% else %}
+            <div class="ver-mas">
+                <button class="btn btn-success" onclick="mostrarMensaje()">Ver más</button>
+            </div>
+        {% endif %}
         </div>
     </div>
 {% endblock %}

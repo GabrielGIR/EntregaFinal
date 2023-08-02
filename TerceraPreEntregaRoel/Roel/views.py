@@ -22,20 +22,25 @@ def inicio(request):
 
 
 def cliente(request):
-    clientes = Cliente.objects.all()[:5]  # Limitamos a solo 5 clientes
+    usuarios = User.objects.all()[:5]  
     avatar = getavatar(request)
-    clientes_totales = Cliente.objects.count()  # Obtenemos la cantidad total de clientes
 
-    show_ver_mas = False
-    if clientes_totales > 5 and not request.user.is_staff:
-        show_ver_mas = True  # Mostrar el botón "Ver más" solo si hay más de 5 clientes y el usuario no es administrador
+    show_ver_mas = request.user.is_staff
 
     context = {
         "avatar": avatar,
-        "clientes": clientes,
-        "show_ver_mas": show_ver_mas,
+        "usuarios": usuarios,
+        'show_ver_mas':show_ver_mas
     }
     return render(request, 'Roel/cliente.html', context)
+
+
+@login_required
+@allowed_users(allowed_roles=['admin'])
+def verMasClientes(request):
+    usuarios = User.objects.all()  
+    return render(request, 'Roel/verMasClientes.html', {'usuarios': usuarios})
+
 
 def distri(request):
     avatar = getavatar(request)
@@ -58,7 +63,7 @@ def setDistri(request):
             solicitud.user = request.user
             solicitud.save()
             mensaje = "¡Gracias por enviar tu solicitud! Pronto nos pondremos en contacto contigo para confirmar si ha sido aprobada o no."
-            return redirect('ver_solicitudes_distri')
+            return render(request, 'Roel/distribuidoras/distri.html', {'form': form, 'mensaje': mensaje})
     else:
         form = FormSolicitudDistribuidora()
     
@@ -371,9 +376,3 @@ def foro(request):
 
 def aboutme(request):
     return render(request, "Roel/index2.html")
-
-@login_required
-@allowed_users(allowed_roles=['admin'])  # Ajusta el rol adecuado para el administrador
-def verMasClientes(request):
-    clientes = Cliente.objects.all()
-    return render(request, 'Roel/Perfil/VerMasClientes.html', {'clientes': clientes})
